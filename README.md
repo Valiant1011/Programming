@@ -7,7 +7,7 @@ Weighted Graphs (Done)
 BFS(Done)  
 DFS(Done)  
 Graph algorithms-  
-+ Dijktra's Shortest path  
++ Dijkstra's Shortest path  
 + Bellman Ford  
 + Kruskal's SP  
 + Prim's SP  
