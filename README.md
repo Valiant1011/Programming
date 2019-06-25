@@ -12,6 +12,7 @@ Graph algorithms-
 + Kruskal's SP  
 + Prim's SP  
 + Travelling salesman problem  
+  
 **DP on graph problems**  
 **Directed Acyclic Graph**  
 **Dynamic Graphs**  
