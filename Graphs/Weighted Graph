@@ -1,0 +1,185 @@
+//  ____   ____      ___  ___               __    ____
+//  \   \ /   /____  |  | |__|____    ____ /  |_ /_   |
+//   \   Y   /\__  \ |  | |  \__  \  /    \|  __\ |   |
+//    \     /  / __ \|  |_|  |/ __ \|   |  \  |   |   |
+//     \___/  (____  /____/__(____  /___|  /__|   |___|
+//                 \/             \/     \/
+//
+//Headers
+#include <bits/stdc++.h>
+#include <iostream>
+//#include<boost/multiprecision/cpp_int.cpp>
+
+//Macros
+#define mod 1000000007
+#define pi 3.1415326
+#define ld long
+#define ll long long
+#define ull unsigned long long
+#define big int128_t
+#define pb push_back
+#define pf push_front
+#define mp make_pair
+#define cs(i) c_str()[i]
+#define loop(i,start_value,final_value) for(i=start_value;i<final_value;i++)
+#define test_cases long test_;cin>>test_;while(test_--)
+#define sfl(x) scanf("%ld",&x)
+#define pfl(x) printf("%ld",x)
+#define elif else if
+#define endl cout<<"\n"
+
+
+//Namespaces
+using namespace std;
+//using namespace boost::multiprecision;
+
+
+//Classes
+class ugraph
+{
+	private:
+		int node_count;							//Stores the number of nodes currently in graph.
+		vector<pair<int,int>> *head;			//Graph (Adjacency List implementation)
+		vector<pair<int,int>> :: iterator it;				//Vector used because of more flexibility.
+		bool *visited;
+		void unvisit()							//This function marks all nodes unvisited in boolean array visited[]
+		{
+	    	for(int i=0;i<node_count;i++)
+            	visited[i]=false;
+		}	
+	public:
+		ugraph(int nodes)						//Parametrised constructor (Number of nodes to be created graph)
+		{
+		    node_count=nodes;
+	    	head=new vector<pair<int,int>>[nodes];		//Initialise the Graph
+	    	visited=new bool[nodes];			//Initialise the visited array
+		}
+
+		void add_edge(int,int,int=0);					//Adds an edge between Node x and Node y
+		void show();							//Presents the graph in an understandable way
+		void dfs(int);							//Basic DFS using iterative stack implementation
+		void bfs(int);							//Basic BFS using iterative queue implementation
+};
+
+void ugraph::add_edge(int x,int y,int w)
+{
+	head[x].push_back(make_pair(y,w));						//Connect Node x to node y
+	head[y].push_back(make_pair(x,w));   					//Remove this or above line for unidirectional graph.
+	return;
+}
+
+void ugraph::show()        						//A flashy function to show the graph in detail.
+{				
+	pair<int,int> data;								
+    cout<<"Graph:\n";
+	cout<<"Node  :: Connections(Weight)\n";
+	for(int i=0;i<node_count;i++)
+	{
+		cout<<"   "<<i<<"  ::  ";
+		for(it=head[i].begin();it!=head[i].end();it++)
+		{
+			data=*it;
+			cout<<data.first<<"("<<data.second<<")"<<" -> ";
+		}
+		endl;
+	}
+}
+
+void ugraph::dfs(int location)					//Stack implementation of DFS
+{
+    unvisit();									//Mark all nodes as unvisited
+    stack<int> stk;
+    stk.push(location);	
+    pair<int,int> data;						//Visit current node
+
+    while(!stk.empty())							//Until all nodes are visited...
+    {
+        location=stk.top();						
+        stk.pop();								//Current node has been visited...
+        if(visited[location]==false)
+        {
+            cout<<location<<" ";				//Do whatever is required with DFS output here
+            visited[location]=true;				//Mark current node as visited.
+        }
+
+        for(it=head[location].begin();it!=head[location].end();it++)    //Visit all unvisited childs of current node
+        {
+        	data=*it;
+            if(visited[data.first]==false)
+            {
+                stk.push(data.first);
+            }
+        }
+
+    }
+
+}
+
+void ugraph::bfs(int location)					//Queue implementation of BFS
+{
+    unvisit();									//Mark all nodes as unvisited
+    queue<int> q;
+    q.push(location);
+    pair<int,int> data;								//Visit current node
+
+    while(!q.empty())							//Until all nodes are visited...
+    {
+        location=q.front();					
+        q.pop();								//Current node has been visited...
+        if(visited[location]==false)
+        {
+            cout<<location<<" ";				//Do whatever is required with BFS output here
+            visited[location]=true;				//Mark current node as visited.
+        }
+
+        for(it=head[location].begin();it!=head[location].end();it++)	//Mark all unvisited childs of current node, to be visited later
+        {
+        	data=*it;
+            if(visited[data.first]==false)
+            {
+                q.push(data.first);
+            }
+        }
+
+    }
+
+}
+
+
+//Functions
+ll max(ll a,ll b){return a>b?a:b;}				
+ll min(ll a,ll b){return a<b?a:b;}
+ll swap(ll a,ll b){a^=b^=a^=b;}
+ll gcd(ll a,ll b){if (b == 0)return a;return gcd(b, a % b);}
+ll lcm(ll x, ll y){return x*y/gcd(x,y);}
+ll power(ll x,ll y,ll p=mod){ll res=1;x=x%p;while(y>0){if(y&1)res=(res*x)%p;y=y>>1;x=(x*x)%p;}return res;}
+bool is_prime(ld n){if(!(n&1)&&n!=2)return false;elif(n==2)return true;else for(ld i=3,s=sqrt(n);i<=s;i+=2){if(n%i==0)return false;}return true;}
+/*
+bool sorter(const pair<ld,ld>&a,const pair<ld,ld>&b)
+{
+	if(a.second<b.second)return true;
+	return false;
+}
+*/
+
+//Trouble brews here...
+
+
+int main(void)
+{
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+	//Variables
+	ugraph g(4);
+	g.add_edge(0,2,1);
+	g.add_edge(3,2);
+	g.add_edge(1,2);
+	//
+	g.show();
+	g.dfs(2);
+	endl;
+	g.bfs(2);
+	return 0;
+}
+
